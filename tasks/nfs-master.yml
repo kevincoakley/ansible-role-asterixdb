@@ -1,0 +1,21 @@
+---
+- name: Include OS family specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Download and install nfs-utils
+  yum: name={{ item }} state=installed
+  with_items: nfs_packages
+
+- name: Ensure rpcbind is running
+  service: name=rpcbind state=started enabled=yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Create the /etc/exports file
+  template: src=nfs/exports.j2 dest=/etc/exports owner=root group=root mode=0644
+  notify: restart nfs
+
+- name: Create the AstrixDB NFS export directory
+  file: path={{ asterixdb_nfs_export }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Ensure nfs is running
+  service: name={{ nfs_server_daemon }} state=started enabled=yes

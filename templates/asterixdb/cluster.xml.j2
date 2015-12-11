@@ -1,0 +1,65 @@
+<cluster xmlns="cluster">
+
+  <!-- Name of the cluster -->
+  <name>{{ asterixdb_cluster_name }}</name>
+
+  <!-- username, which should be valid for all the three machines -->
+  <username>asterixdb</username>
+
+  <!-- The working directory of Managix. It is recommended for the working
+       directory to be on a network file system (NFS) that can accessed by
+       all machines.
+       Managix creates the directory if it it doesn't exist. -->
+  <working_dir>
+    <dir>{{ asterixdb_nfs_export }}</dir>
+    <NFS>true</NFS>
+  </working_dir>
+
+  <!-- Directory for Asterix to store worker logs information for each machine.
+       Needs to be on the local file system of each machine.
+       Managix creates the directory if it doesn't exist.
+       This property can be overriden for a node by redefining at the node level. -->
+  <log_dir>{{ asterixdb_logs_dir }}</log_dir>
+
+  <!-- Directory for Asterix to store transaction log information for each machine.
+       Needs to be on the local file system of each machine.
+       Managix creates the directory if it doesn't exist.
+       This property can be overriden for a node by redefining at the node level. -->
+  <txn_log_dir>{{ asterixdb_txn_logs }}</txn_log_dir>
+
+  <!-- Mount point of an iodevice. Use a comma separated list for a machine that
+       has multiple iodevices (disks).
+       This property can be overriden for a node by redefining at the node level. -->
+  <iodevices>{{ asterixdb_iodevices }}</iodevices>
+
+  <!-- Path on each iodevice where Asterix will store its data -->
+  <store>{{ asterixdb_iodevices_storage }}</store>
+
+  <!-- Java home for each machine -->
+  <java_home>/usr/lib/jvm/jre/</java_home>
+
+{% for host in groups[asterixdb_ansible_host_group] %}
+{% if hostvars[host].asterixdb_master == True %}
+  <!-- IP addresses of the master -->
+  <master_node>
+    <id>master</id>
+    <client_ip>{{ hostvars[host].ansible_default_ipv4.address }}</client_ip>
+    <cluster_ip>{{ hostvars[host].ansible_default_ipv4.address }}</cluster_ip>
+    <client_port>{{ asterixdb_client_port }}</client_port>
+    <cluster_port>{{ asterixdb_cluster_port }}</cluster_port>
+    <http_port>{{ asterixdb_http_port }}</http_port>
+  </master_node>
+{% endif %}
+{% endfor %}
+
+{% for host in groups[asterixdb_ansible_host_group] %}
+{% if hostvars[host].asterixdb_master == False %}
+  <!-- IP address(es) of worker: {{ host }} -->
+  <node>
+    <id>{{ host }}</id>
+    <cluster_ip>{{ hostvars[host].ansible_default_ipv4.address }}</cluster_ip>
+  </node>
+{% endif %}
+{% endfor %}
+
+</cluster>

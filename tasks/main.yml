@@ -1,0 +1,64 @@
+---
+- name: Create the asterixdb group
+  group: name=asterixdb state=present system=yes
+
+- name: Create the asterixdb user
+  user: name=asterixdb groups=asterixdb append=yes
+
+#
+# You must run files/ssh/make_ssh_key.sh before running this role
+#
+- name: Set up generated authorized_key for the asterixdb user
+  authorized_key: user=asterixdb key="{{ item }}"
+  with_file: ssh/id_rsa.pub
+
+- name: Copy the generated SSH private key to the asterixdb home directory
+  copy: src=ssh/id_rsa dest=/home/asterixdb/.ssh/id_rsa owner=asterixdb group=asterixdb mode=0400
+
+- name: Copy the SSH config to the asterixdb home directory so ssh doesn't ask to verify host signatures 
+  copy: src=ssh/ssh_config dest=/home/asterixdb/.ssh/config owner=asterixdb group=asterixdb mode=0400
+
+# RedHat 
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: nfs-master.yml
+  when: asterixdb_master == True
+
+- include: nfs-client.yml
+  when: asterixdb_master == False
+
+- name: Check if the version of AsterixDB already exists
+  stat: path=/opt/asterixdb-{{ asterixdb_version }}
+  register: asterixdb_path
+
+- name: Download AsterixDB
+  get_url: url=https://asterixdb.ics.uci.edu/download/0.8.6/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip
+  when: asterixdb_path.stat.exists == False
+
+- name: Create the AsterixDB dir
+  file: path=/opt/asterixdb-{{ asterixdb_version }} state=directory owner=asterixdb group=asterixdb mode=0755
+  when: asterixdb_path.stat.exists == False
+
+- name: Extract AsterixDB
+  unarchive: src=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/opt/asterixdb-{{ asterixdb_version }} copy=no owner=asterixdb group=asterixdb
+  when: asterixdb_path.stat.exists == False
+
+- name: Create a symlink for /opt/asterixdb
+  file: src=/opt/asterixdb-{{ asterixdb_version }} dest=/opt/asterixdb owner=asterixdb group=asterixdb state=link
+  when: asterixdb_path.stat.exists == False
+
+- name: Create the cluster config dir
+  file: path=/opt/asterixdb/clusters/{{ asterixdb_cluster_name }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Create the cluster config file 
+  template: src=asterixdb/cluster.xml.j2 dest=/opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml owner=asterixdb group=asterixdb mode=0644
+
+- name: Create the Managix config file
+  template: src=asterixdb/managix-conf.xml.j2 dest=/opt/asterixdb/conf/managix-conf.xml owner=asterixdb group=asterixdb mode=0644
+
+#- name: Create the AsterixDB home dir
+#  file: path={{ asterixdb_home }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+#- name: Ensure AsterixDB is started and enabled on boot
+#  service: name=asterixdb state=started enabled=yes
