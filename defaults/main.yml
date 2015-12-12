@@ -5,8 +5,8 @@ asterixdb_nfs_export: /mnt/asterixdb/asterixdb-working-dir
 asterixdb_cluster_name: default
 asterixdb_logs_dir: /mnt/asterixdb/asterixdb-logs
 asterixdb_txn_logs: /mnt/asterixdb/asterixdb-txn-logs
-asterixdb_iodevices: /mnt/asterixdb/
-asterixdb_iodevices_storage: asterixdb-storage
+asterixdb_iodevices: /mnt/asterixdb/asterixdb/
+asterixdb_iodevices_storage: storage
 asterixdb_client_port: 1098
 asterixdb_cluster_port: 1099
 asterixdb_http_port: 8888
