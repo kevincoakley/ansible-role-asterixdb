@@ -57,8 +57,12 @@
 - name: Create the Managix config file
   template: src=asterixdb/managix-conf.xml.j2 dest=/opt/asterixdb/conf/managix-conf.xml owner=asterixdb group=asterixdb mode=0644
 
-#- name: Create the AsterixDB home dir
-#  file: path={{ asterixdb_home }} state=directory owner=asterixdb group=asterixdb mode=0755
+- name: Create the AsterixDB cluster instance
+  shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
+  args:
+    creates: "{{ asterixdb_nfs_export }}/configuration.xml"
+  when: asterixdb_master == True
+  sudo_user: asterixdb
 
 #- name: Ensure AsterixDB is started and enabled on boot
 #  service: name=asterixdb state=started enabled=yes
