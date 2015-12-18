@@ -1,6 +1,0 @@
----
-- name: Download and install java-1.7.0-openjdk and unzip
-  yum: name={{ item }} state=installed
-  with_items:
-  - java-1.7.0-openjdk
-  - unzip
