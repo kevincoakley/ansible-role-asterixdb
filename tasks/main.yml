@@ -69,7 +69,7 @@
 - name: Create the AsterixDB cluster instance
   shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
   args:
-    creates: "{{ asterixdb_nfs_export }}/configuration.xml"
+    creates: "{{ asterixdb_working_dir }}/configuration.xml"
   when: asterixdb_master == True
   sudo_user: asterixdb
 

@@ -10,5 +10,5 @@
 #
 
 {% for host in groups[asterixdb_ansible_host_group] %}
-{{ asterixdb_nfs_export }}	{{ hostvars[host]['ansible_ssh_host'] }}(rw,sync,no_subtree_check)
+{{ asterixdb_working_dir }}	{{ hostvars[host]['ansible_ssh_host'] }}(rw,sync,no_subtree_check)
 {% endfor %}

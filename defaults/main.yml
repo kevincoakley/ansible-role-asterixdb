@@ -1,7 +1,7 @@
 ---
 asterixdb_version: 0.8.6
 asterixdb_ansible_host_group: asterixdb
-asterixdb_nfs_export: /mnt/asterixdb/asterixdb-working-dir
+asterixdb_working_dir: /mnt/asterixdb/asterixdb-working-dir
 asterixdb_cluster_name: default
 asterixdb_logs_dir: /mnt/asterixdb/asterixdb-logs
 asterixdb_txn_logs: /mnt/asterixdb/asterixdb-txn-logs
