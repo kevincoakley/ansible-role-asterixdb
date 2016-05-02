@@ -1,6 +1,6 @@
 ---
 asterixdb_packages:
-  - openjdk-7-jre
+  - openjdk-8-jre
   - unzip
 nfs_server_daemon: nfs-kernel-server
 nfs_packages:
