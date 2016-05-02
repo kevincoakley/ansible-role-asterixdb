@@ -23,12 +23,12 @@
 
 - name: Download and install yum packages
   yum: name={{ item }} state=present
-  with_items: asterixdb_packages
+  with_items: "{{ asterixdb_packages }}"
   when: ansible_os_family == "RedHat"
 
-- name: Download and install apt-get packages 
+- name: Download and install apt-get packages
   apt: name={{ item }} state=present
-  with_items: asterixdb_packages
+  with_items: "{{ asterixdb_packages }}"
   when: ansible_os_family == "Debian"
 
 - include: nfs-master.yml
