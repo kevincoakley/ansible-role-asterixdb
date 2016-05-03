@@ -36,7 +36,7 @@
   <store>{{ asterixdb_iodevices_storage }}</store>
 
   <!-- Java home for each machine -->
-  <java_home>/usr/lib/jvm/jre/</java_home>
+  <java_home>{{ java_home }}</java_home>
 
 {% if asterixdb_cluster == True %}
 {% for host in groups[asterixdb_ansible_host_group] %}
