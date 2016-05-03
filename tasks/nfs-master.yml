@@ -18,7 +18,7 @@
   notify: restart nfs
 
 - name: Create the AstrixDB NFS export directory
-  file: path={{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
 
 - name: Ensure nfs is running
   service: name={{ nfs_server_daemon }} state=started enabled=yes
