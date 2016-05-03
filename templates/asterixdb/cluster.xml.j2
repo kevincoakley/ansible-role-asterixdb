@@ -11,7 +11,7 @@
        all machines.
        Managix creates the directory if it it doesn't exist. -->
   <working_dir>
-    <dir>{{ asterixdb_working_dir }}</dir>
+    <dir>{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}</dir>
     <NFS>true</NFS>
   </working_dir>
 
@@ -19,18 +19,18 @@
        Needs to be on the local file system of each machine.
        Managix creates the directory if it doesn't exist.
        This property can be overriden for a node by redefining at the node level. -->
-  <log_dir>{{ asterixdb_logs_dir }}</log_dir>
+  <log_dir>{{ asterixdb_data_dir }}{{ asterixdb_logs_dir }}</log_dir>
 
   <!-- Directory for Asterix to store transaction log information for each machine.
        Needs to be on the local file system of each machine.
        Managix creates the directory if it doesn't exist.
        This property can be overriden for a node by redefining at the node level. -->
-  <txn_log_dir>{{ asterixdb_txn_logs }}</txn_log_dir>
+  <txn_log_dir>{{ asterixdb_data_dir }}{{ asterixdb_txn_logs }}</txn_log_dir>
 
   <!-- Mount point of an iodevice. Use a comma separated list for a machine that
        has multiple iodevices (disks).
        This property can be overriden for a node by redefining at the node level. -->
-  <iodevices>{{ asterixdb_iodevices }}</iodevices>
+  <iodevices>{{ asterixdb_data_dir }}{{ asterixdb_iodevices }}</iodevices>
 
   <!-- Path on each iodevice where Asterix will store its data -->
   <store>{{ asterixdb_iodevices_storage }}</store>

@@ -45,7 +45,7 @@
   get_url: url=https://asterixdb.ics.uci.edu/download/0.8.6/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip
   when: asterixdb_install_path.stat.exists == False
 
-- name: Create the AsterixDB dir
+- name: Create the AsterixDB install dir
   file: path=/opt/asterixdb-{{ asterixdb_version }} state=directory owner=asterixdb group=asterixdb mode=0755
   when: asterixdb_install_path.stat.exists == False
 
@@ -69,9 +69,9 @@
 - name: Create the AsterixDB cluster instance
   shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
   args:
-    creates: "{{ asterixdb_working_dir }}/configuration.xml"
   when: asterixdb_master == True
   sudo_user: asterixdb
+    creates: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}/configuration.xml"
 
 #- name: Ensure AsterixDB is started and enabled on boot
 #  service: name=asterixdb state=started enabled=yes

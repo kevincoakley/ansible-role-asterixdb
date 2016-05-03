@@ -1,13 +1,15 @@
 ---
 asterixdb_version: 0.8.6
+asterixdb_cluster: False
 asterixdb_ansible_host_group: asterixdb
-asterixdb_working_dir: /mnt/asterixdb/asterixdb-working-dir
+asterixdb_data_dir: /mnt/asterixdb/
+asterixdb_working_dir: asterixdb-working-dir
 asterixdb_cluster_name: default
-asterixdb_logs_dir: /mnt/asterixdb/asterixdb-logs
-asterixdb_txn_logs: /mnt/asterixdb/asterixdb-txn-logs
-asterixdb_iodevices: /mnt/asterixdb/asterixdb/
+asterixdb_logs_dir: asterixdb-logs
+asterixdb_txn_logs: asterixdb-txn-logs
+asterixdb_iodevices: asterixdb/
 asterixdb_iodevices_storage: storage
 asterixdb_client_port: 1098
 asterixdb_cluster_port: 1099
 asterixdb_http_port: 8888
-asterixdb_backup_dir: /mnt/asterixdb/asterixdb-backup
+asterixdb_backup_dir: asterixdb-backup
