@@ -66,7 +66,7 @@
   register: asterixdb_install_path
 
 - name: Download AsterixDB
-  get_url: url=https://asterixdb.ics.uci.edu/download/0.8.6/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip
+  get_url: url=http://www-us.apache.org/dist/incubator/asterixdb/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip dest=/tmp/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create the AsterixDB install dir
@@ -74,7 +74,7 @@
   when: asterixdb_install_path.stat.exists == False
 
 - name: Extract AsterixDB
-  unarchive: src=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/opt/asterixdb-{{ asterixdb_version }} copy=no owner=asterixdb group=asterixdb
+  unarchive: src=/tmp/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip dest=/opt/asterixdb-{{ asterixdb_version }} copy=no owner=asterixdb group=asterixdb
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create a symlink for /opt/asterixdb

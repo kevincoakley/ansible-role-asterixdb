@@ -1,5 +1,5 @@
 ---
-asterixdb_version: 0.8.6
+asterixdb_version: 0.8.8
 asterixdb_cluster: False
 asterixdb_ansible_host_group: asterixdb
 asterixdb_data_dir: /mnt/asterixdb/
