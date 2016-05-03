@@ -39,23 +39,23 @@
 
 - name: Check if the version of AsterixDB already exists
   stat: path=/opt/asterixdb-{{ asterixdb_version }}
-  register: asterixdb_path
+  register: asterixdb_install_path
 
 - name: Download AsterixDB
   get_url: url=https://asterixdb.ics.uci.edu/download/0.8.6/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip
-  when: asterixdb_path.stat.exists == False
+  when: asterixdb_install_path.stat.exists == False
 
 - name: Create the AsterixDB dir
   file: path=/opt/asterixdb-{{ asterixdb_version }} state=directory owner=asterixdb group=asterixdb mode=0755
-  when: asterixdb_path.stat.exists == False
+  when: asterixdb_install_path.stat.exists == False
 
 - name: Extract AsterixDB
   unarchive: src=/tmp/asterix-installer-{{ asterixdb_version }}-binary-assembly.zip dest=/opt/asterixdb-{{ asterixdb_version }} copy=no owner=asterixdb group=asterixdb
-  when: asterixdb_path.stat.exists == False
+  when: asterixdb_install_path.stat.exists == False
 
 - name: Create a symlink for /opt/asterixdb
   file: src=/opt/asterixdb-{{ asterixdb_version }} dest=/opt/asterixdb owner=asterixdb group=asterixdb state=link
-  when: asterixdb_path.stat.exists == False
+  when: asterixdb_install_path.stat.exists == False
 
 - name: Create the cluster config dir
   file: path=/opt/asterixdb/clusters/{{ asterixdb_cluster_name }} state=directory owner=asterixdb group=asterixdb mode=0755
