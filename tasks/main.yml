@@ -66,6 +66,13 @@
 - name: Create the Managix config file
   template: src=asterixdb/managix-conf.xml.j2 dest=/opt/asterixdb/conf/managix-conf.xml owner=asterixdb group=asterixdb mode=0644
 
+- name: Test the Managix config
+  shell: /opt/asterixdb/bin/managix validate -c /opt/asterixdb/clusters/default/default.xml
+  args:
+    executable: /bin/bash
+  become_user: asterixdb
+  become_method: sudo
+
 - name: Create the AsterixDB cluster instance
   shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
   args:
