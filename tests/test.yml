@@ -1,0 +1,40 @@
+---
+- name: Start the Docker containers
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - docker_containers.yml
+
+  roles:
+    - docker-start
+
+  tags:
+    - docker-start
+
+
+- name: Test the stand alone AsterixDB role for CentOS and Ubuntu
+  hosts: asterixdb
+  become: yes
+  become_method: sudo
+
+  roles:
+    - ansible-role-asterixdb
+    - asterixdb-test
+
+  tags:
+    - asterixdb
+
+
+- name: Stop the Docker containers
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - docker_containers.yml
+
+  roles:
+    - docker-stop
+
+  tags:
+    - docker-stop

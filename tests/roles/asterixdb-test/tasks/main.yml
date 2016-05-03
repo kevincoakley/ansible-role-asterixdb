@@ -1,0 +1,8 @@
+---
+- name: Give the AsterixDB time to start
+  pause: seconds=10
+
+- name: Verify that AsterixDB is running on port 19001
+  uri:
+    url: http://127.0.0.1:19001/
+    status_code: 200
