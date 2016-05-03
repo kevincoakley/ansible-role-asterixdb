@@ -3,6 +3,7 @@ asterixdb_packages:
   - openjdk-8-jre
   - unzip
   - sudo
+java_home: /usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/
 nfs_server_daemon: nfs-kernel-server
 nfs_packages:
   - nfs-common
