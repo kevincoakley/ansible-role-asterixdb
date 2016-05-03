@@ -6,7 +6,7 @@
   group: name=asterixdb state=present system=yes
 
 - name: Create the asterixdb user
-  user: name=asterixdb groups=asterixdb append=yes
+  user: name=asterixdb groups=asterixdb append=yes shell=/bin/bash
 
 #
 # You must run files/ssh/make_ssh_key.sh before running this role
