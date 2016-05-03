@@ -70,8 +70,9 @@
   shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
   args:
   when: asterixdb_master == True
-  sudo_user: asterixdb
     creates: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}/configuration.xml"
+  become_user: asterixdb
+  become_method: sudo
 
 #- name: Ensure AsterixDB is started and enabled on boot
 #  service: name=asterixdb state=started enabled=yes
