@@ -38,6 +38,7 @@
   <!-- Java home for each machine -->
   <java_home>/usr/lib/jvm/jre/</java_home>
 
+{% if asterixdb_cluster == True %}
 {% for host in groups[asterixdb_ansible_host_group] %}
 {% if hostvars[host].asterixdb_master == True %}
   <!-- IP addresses of the master -->
@@ -61,5 +62,22 @@
   </node>
 {% endif %}
 {% endfor %}
+{% else %}
+  <!-- IP addresses of the master -->
+  <master_node>
+    <id>master</id>
+    <client_ip>127.0.0.1</client_ip>
+    <cluster_ip>127.0.0.1</cluster_ip>
+    <client_port>{{ asterixdb_client_port }}</client_port>
+    <cluster_port>{{ asterixdb_cluster_port }}</cluster_port>
+    <http_port>{{ asterixdb_http_port }}</http_port>
+  </master_node>
+
+  <!-- IP address(es) of worker: node1 -->
+  <node>
+    <id>node1</id>
+    <cluster_ip>127.0.0.1</cluster_ip>
+  </node>
+{% endif %}
 
 </cluster>
