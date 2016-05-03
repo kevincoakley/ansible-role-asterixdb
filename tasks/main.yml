@@ -13,13 +13,13 @@
 #
 - name: Set up generated authorized_key for the asterixdb user
   authorized_key: user=asterixdb key="{{ item }}"
-  with_file: ssh/id_rsa.pub
+  with_file: "{{ role_path }}/files/ssh/id_rsa.pub"
 
 - name: Copy the generated SSH private key to the asterixdb home directory
-  copy: src=ssh/id_rsa dest=/home/asterixdb/.ssh/id_rsa owner=asterixdb group=asterixdb mode=0400
+  copy: src="{{ role_path }}/files/ssh/id_rsa" dest=/home/asterixdb/.ssh/id_rsa owner=asterixdb group=asterixdb mode=0400
 
 - name: Copy the SSH config to the asterixdb home directory so ssh doesn't ask to verify host signatures 
-  copy: src=ssh/ssh_config dest=/home/asterixdb/.ssh/config owner=asterixdb group=asterixdb mode=0400
+  copy: src="{{ role_path }}/files/ssh/ssh_config" dest=/home/asterixdb/.ssh/config owner=asterixdb group=asterixdb mode=0400
 
 - name: Download and install yum packages
   yum: name={{ item }} state=present
