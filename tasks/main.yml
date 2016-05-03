@@ -31,6 +31,30 @@
   with_items: "{{ asterixdb_packages }}"
   when: ansible_os_family == "Debian"
 
+#
+# Create the AsterixDB data directory tree
+#
+- name: Create the AsterixDB data directory
+  file: path={{ asterixdb_data_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Create the AsterixDB working directory
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Create the AsterixDB logs directory
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_logs_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Create the AsterixDB transaction logs directory
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_txn_logs }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Create the AsterixDB iodevices directory
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_iodevices }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+- name: Create the AsterixDB backup directory
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_backup_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+
+#
+# Install NFS if AsterixDB is clustered
+#
 - include: nfs-master.yml
   when: asterixdb_master == True
 
