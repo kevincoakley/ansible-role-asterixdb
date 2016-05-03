@@ -100,9 +100,9 @@
 - name: Create the AsterixDB cluster instance
   shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
   args:
-  when: asterixdb_master == True
     creates: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}/configuration.xml"
     executable: /bin/bash
+  when: asterixdb_cluster == False or asterixdb_master == True
   become_user: asterixdb
   become_method: sudo
 
