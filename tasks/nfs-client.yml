@@ -3,11 +3,11 @@
   file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
 
 - name: Add the NFS master share to /etc/fstab
-  mount: name={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} src={{ hostvars[item].ansible_default_ipv4.address }}:{{ asterixdb_data_dir }}{{ asterixdb_working_dir }} fstype=nfs state=present
+  mount: name={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} src={{ hostvars[item][asterixdb_server_variable] }}:{{ asterixdb_data_dir }}{{ asterixdb_working_dir }} fstype=nfs state=present
   with_items: groups[asterixdb_ansible_host_group]
   when: hostvars[item].asterixdb_master == True
 
 - name: Mount the NFS master share 
-  mount: name={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} src={{ hostvars[item].ansible_default_ipv4.address }}:{{ asterixdb_data_dir }}{{ asterixdb_working_dir }} fstype=nfs state=mounted
+  mount: name={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} src={{ hostvars[item][asterixdb_server_variable] }}:{{ asterixdb_data_dir }}{{ asterixdb_working_dir }} fstype=nfs state=mounted
   with_items: groups[asterixdb_ansible_host_group]
   when: hostvars[item].asterixdb_master == True
