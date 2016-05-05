@@ -11,9 +11,20 @@
     <zookeeper>
         <homeDir>/opt/asterixdb/.installer/zookeeper_home</homeDir>
         <clientPort>2900</clientPort>
+{% if asterixdb_cluster == True %}
+{% for host in groups[asterixdb_ansible_host_group] %}
+{% if hostvars[host].asterixdb_master == True %}
+        <servers>
+            <java_home>{{ java_home }}</java_home>
+            <server>{{ hostvars[host][asterixdb_server_variable] }}</server>
+        </servers>
+{% endif %}
+{% endfor %}
+{% else %}
         <servers>
             <java_home>{{ java_home }}</java_home>
             <server>127.0.0.1</server>
         </servers>
+{% endif %}
     </zookeeper>
 </configuration>
