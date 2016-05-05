@@ -54,7 +54,7 @@
 {% endfor %}
 
 {% for host in groups[asterixdb_ansible_host_group] %}
-{% if hostvars[host].asterixdb_master == False %}
+{% if hostvars[host].asterixdb_worker == True|default(False) %}
   <!-- IP address(es) of worker: {{ host }} -->
   <node>
     <id>{{ host }}</id>
