@@ -14,3 +14,4 @@ asterixdb_client_port: 1098
 asterixdb_cluster_port: 1099
 asterixdb_http_port: 8888
 asterixdb_backup_dir: asterixdb-backup
+asterixdb_download_url: http://www-us.apache.org/dist/incubator/asterixdb/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip
