@@ -1,4 +1,17 @@
 ---
+- name: Download and install nfs packages
+  yum: name={{ item }} state=present
+  with_items: "{{ nfs_packages }}"
+  when: ansible_os_family == 'RedHat'
+
+- name: Download and install nfs packages
+  apt: name={{ item }} state=present
+  with_items: "{{ nfs_packages }}"
+  when: ansible_os_family == 'Debian'
+
+- name: Ensure rpcbind is running
+  service: name=rpcbind state=started enabled=yes
+
 - name: Create the AsterixDB NFS export directory
   file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
 
