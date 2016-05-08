@@ -9,8 +9,12 @@
   with_items: "{{ nfs_packages }}"
   when: ansible_os_family == 'Debian'
 
-- name: Ensure rpcbind is running
-  service: name=rpcbind state=started enabled=yes
+- name: Ensure Redhat NFS services are running
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - rpcbind
+    - nfs-lock
+    - nfs-idmap
   when: ansible_os_family == 'RedHat'
 
 - name: Create the /etc/exports file
