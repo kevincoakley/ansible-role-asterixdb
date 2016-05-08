@@ -17,15 +17,15 @@
     - nfs-idmap
   when: ansible_os_family == 'RedHat'
 
+- name: Ensure nfs is running
+  service: name={{ nfs_server_daemon }} state=started enabled=yes
+
+- name: Create the AstrixDB NFS export directory
+  file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+
 - name: Create the /etc/exports file
   template: src=nfs/exports.j2 dest=/etc/exports owner=root group=root mode=0644
   notify: nfs update exports
 
 - name: Fource nfs update export to run
   meta: flush_handlers
-
-- name: Create the AstrixDB NFS export directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
-
-- name: Ensure nfs is running
-  service: name={{ nfs_server_daemon }} state=started enabled=yes
