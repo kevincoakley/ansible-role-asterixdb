@@ -1,4 +1,4 @@
-.PHONY: docker-start asterixdb ubuntu-cluster centos-cluster docker-stop all
+.PHONY: docker-start asterixdb ubuntu-cluster centos-cluster docker-stop travis all
 
 DEBUG =
 TAGS = all
@@ -34,3 +34,6 @@ debug: executable
 
 executable:
 	ansible-playbook -i $(INVENTORY) -t $(TAGS) test.yml $(DEBUG)
+
+travis:
+	ansible-playbook -i $(INVENTORY) --skip-tags=docker-stop test.yml -vvvv
