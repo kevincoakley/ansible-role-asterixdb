@@ -6,3 +6,22 @@ docker_containers:
   - name: centos7-systemd
     image: kevincoakley/centos7-systemd
     ssh_port: 2222
+  - name: ubuntu-cluster-0
+    image: kevincoakley/ubuntu16.04-systemd
+    ssh_port: 2201
+  - name: ubuntu-cluster-1
+    image: kevincoakley/ubuntu16.04-systemd
+    ssh_port: 2202
+  - name: ubuntu-cluster-2
+    image: kevincoakley/ubuntu16.04-systemd
+    ssh_port: 2203
+  - name: centos-cluster-0
+    image: kevincoakley/centos7-systemd
+    ssh_port: 2223
+  - name: centos-cluster-1
+    image: kevincoakley/centos7-systemd
+    ssh_port: 2224
+  - name: centos-cluster-2
+    image: kevincoakley/centos7-systemd
+    ssh_port: 2225
+

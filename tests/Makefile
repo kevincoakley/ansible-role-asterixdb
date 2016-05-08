@@ -1,4 +1,4 @@
-.PHONY: docker-start asterixdb docker-stop all
+.PHONY: docker-start asterixdb ubuntu-cluster centos-cluster docker-stop all
 
 DEBUG =
 TAGS = all
@@ -19,6 +19,12 @@ docker-start: executable
 
 asterixdb: TAGS = asterixdb
 asterixdb: executable
+
+ubuntu-cluster: TAGS = ubuntu-cluster
+ubuntu-cluster: executable
+
+centos-cluster: TAGS = centos-cluster
+centos-cluster: executable
 
 docker-stop: TAGS = docker-stop
 docker-stop: executable

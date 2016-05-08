@@ -26,6 +26,46 @@
     - asterixdb
 
 
+- name: Test the cluster AsterixDB role on Ubuntu
+  hosts: ubuntu-cluster
+  become: yes
+  become_method: sudo
+
+  vars:
+    - asterixdb_cluster: True
+    - asterixdb_ansible_host_group: ubuntu-cluster
+    - asterixdb_server_variable: facter_ipaddress
+    - asterixdb_data_dir: /run/mount/asterixdb/
+
+  roles:
+    - facter
+    - ansible-role-asterixdb
+    - asterixdb-test
+
+  tags:
+    - ubuntu-cluster
+
+
+- name: Test the cluster AsterixDB role on Centos
+  hosts: centos-cluster
+  become: yes
+  become_method: sudo
+
+  vars:
+    - asterixdb_cluster: True
+    - asterixdb_ansible_host_group: centos-cluster
+    - asterixdb_server_variable: facter_ipaddress
+    - asterixdb_data_dir: /run/mount/asterixdb/
+
+  roles:
+    - facter
+    - ansible-role-asterixdb
+    - asterixdb-test
+
+  tags:
+    - centos-cluster
+
+
 - name: Stop the Docker containers
   hosts: localhost
   gather_facts: false

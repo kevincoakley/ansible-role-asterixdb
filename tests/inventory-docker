@@ -7,3 +7,13 @@ ansible_host=127.0.0.1
 [asterixdb]
 ubuntu ansible_ssh_host=127.0.0.1 ansible_port=2200
 centos ansible_ssh_host=127.0.0.1 ansible_port=2222
+
+[ubuntu-cluster]
+ubuntu-cluster-0 ansible_ssh_host=127.0.0.1 ansible_port=2201 asterixdb_master=True asterixdb_worker=True
+ubuntu-cluster-1 ansible_ssh_host=127.0.0.1 ansible_port=2202 asterixdb_master=False asterixdb_worker=True
+ubuntu-cluster-2 ansible_ssh_host=127.0.0.1 ansible_port=2203 asterixdb_master=False asterixdb_worker=True
+
+[centos-cluster]
+centos-cluster-0 ansible_ssh_host=127.0.0.1 ansible_port=2223 asterixdb_master=True asterixdb_worker=True
+centos-cluster-1 ansible_ssh_host=127.0.0.1 ansible_port=2224 asterixdb_master=False asterixdb_worker=True
+centos-cluster-2 ansible_ssh_host=127.0.0.1 ansible_port=2225 asterixdb_master=False asterixdb_worker=True
