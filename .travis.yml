@@ -33,7 +33,7 @@ install:
 
 script:
   - ansible-playbook -i tests/inventory-docker tests/test.yml --syntax-check
-  - cd tests && make debug
+  - cd tests && make travis
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
