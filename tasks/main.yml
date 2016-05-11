@@ -53,6 +53,18 @@
   file: path={{ asterixdb_data_dir }}{{ asterixdb_backup_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
 
 #
+# Set the open file limit to 40000
+#
+- name: Set the open files soft limits in /etc/security/limits.conf
+  lineinfile: dest=/etc/security/limits.conf line="*           soft    nofile          40000" insertbefore="# End of file" state=present
+
+- name: Set the open files hard limits in /etc/security/limits.conf
+  lineinfile: dest=/etc/security/limits.conf line="*           hard    nofile          40000" insertbefore="# End of file" state=present
+
+- name: Ensure pam_limits.so is enabled
+  lineinfile: dest=/etc/pam.d/su  regexp="^(# )?session    required   pam_limits.so" line="session    required   pam_limits.so" state=present
+
+#
 # Install NFS if AsterixDB is clustered
 #
 - include: nfs-master.yml
