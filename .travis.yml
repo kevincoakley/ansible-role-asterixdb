@@ -33,7 +33,8 @@ install:
 
 script:
   - ansible-playbook -i tests/inventory-docker tests/test.yml --syntax-check
-  - cd tests && make travis
+  # Run the playbook, don't bother stopping the Docker containers
+  - ansible-playbook -i tests/inventory --skip-tags=docker-stop tests/test.yml
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
