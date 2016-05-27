@@ -1,31 +1,51 @@
 ---
-- name: Download and install nfs packages
-  yum: name={{ item }} state=present
+- name: Download and install the nfs packages (yum)
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items: "{{ nfs_packages }}"
   when: ansible_os_family == 'RedHat'
 
-- name: Download and install nfs packages
-  apt: name={{ item }} state=present
+- name: Download and install the nfs packages (apt)
+  apt:
+    name: "{{ item }}"
+    state: present
   with_items: "{{ nfs_packages }}"
   when: ansible_os_family == 'Debian'
 
-- name: Ensure Redhat NFS services are running
-  service: name={{ item }} state=started enabled=yes
+- name: Ensure the NFS services are running on RedHat systems
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
   with_items:
     - rpcbind
     - nfs-lock
     - nfs-idmap
   when: ansible_os_family == 'RedHat'
 
-- name: Ensure nfs is running
-  service: name={{ nfs_server_daemon }} state=started enabled=yes
+- name: Ensure the nfs service is running
+  service:
+    name: "{{ nfs_server_daemon }}"
+    state: started
+    enabled: yes
 
-- name: Create the AstrixDB NFS export directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+- name: Create the AsterixDB NFS export directory
+  file:
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the /etc/exports file
-  template: src=nfs/exports.j2 dest=/etc/exports owner=root group=root mode=0644
+  template:
+    src: nfs/exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
   notify: nfs update exports
 
-- name: Fource nfs update export to run
+- name: Force 'nfs update export' handler to run
   meta: flush_handlers
