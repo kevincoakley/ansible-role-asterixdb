@@ -1,6 +1,8 @@
 ansible-role-asterixdb
 ======================
 
+[![Build Status](https://travis-ci.org/kevincoakley/ansible-role-asterixdb.svg?branch=master)](https://travis-ci.org/kevincoakley/ansible-role-asterixdb)
+
 Install AsterixDB (single machine and clustered) - https://asterixdb.apache.org/ . Tested with CentOS 7 and Ubuntu 16.04
 
 Requirements
