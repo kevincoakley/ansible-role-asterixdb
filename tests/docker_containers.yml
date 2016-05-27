@@ -12,12 +12,6 @@ docker_containers:
       - "2222:22"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
-  - name: centos-cluster-0
-    image: kevincoakley/centos7-systemd
-    ports:
-      - "2223:22"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: centos-cluster-1
     image: kevincoakley/centos7-systemd
     ports:
@@ -30,10 +24,10 @@ docker_containers:
       - "2225:22"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
-  - name: ubuntu-cluster-0
-    image: kevincoakley/ubuntu16.04-systemd
+  - name: centos-cluster-0
+    image: kevincoakley/centos7-systemd
     ports:
-      - "2201:22"
+      - "2223:22"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: ubuntu-cluster-1
@@ -46,5 +40,11 @@ docker_containers:
     image: kevincoakley/ubuntu16.04-systemd
     ports:
       - "2203:22"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup"
+  - name: ubuntu-cluster-0
+    image: kevincoakley/ubuntu16.04-systemd
+    ports:
+      - "2201:22"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
