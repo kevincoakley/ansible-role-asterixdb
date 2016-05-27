@@ -6,14 +6,18 @@
   vars_files:
     - docker_containers.yml
 
+  vars:
+    - container_state: reloaded
+    - container_privileged: true
+
   roles:
-    - docker-start
+    - docker
 
   tags:
     - docker-start
 
 
-- name: Test the stand alone AsterixDB role for CentOS and Ubuntu
+- name: Test the AsterixDB role for stand alone CentOS and Ubuntu systems
   hosts: asterixdb
   become: yes
   become_method: sudo
@@ -26,27 +30,7 @@
     - asterixdb
 
 
-- name: Test the cluster AsterixDB role on Ubuntu
-  hosts: ubuntu-cluster
-  become: yes
-  become_method: sudo
-
-  vars:
-    - asterixdb_cluster: True
-    - asterixdb_ansible_host_group: ubuntu-cluster
-    - asterixdb_server_variable: facter_ipaddress
-    - asterixdb_data_dir: /run/mount/asterixdb/
-
-  roles:
-    - facter
-    - ansible-role-asterixdb
-    - asterixdb-test
-
-  tags:
-    - ubuntu-cluster
-
-
-- name: Test the cluster AsterixDB role on Centos
+- name: Test the AsterixDB role as a cluster on Centos
   hosts: centos-cluster
   become: yes
   become_method: sudo
@@ -66,6 +50,26 @@
     - centos-cluster
 
 
+- name: Test the AsterixDB role as a cluster on Ubuntu
+  hosts: ubuntu-cluster
+  become: yes
+  become_method: sudo
+
+  vars:
+    - asterixdb_cluster: True
+    - asterixdb_ansible_host_group: ubuntu-cluster
+    - asterixdb_server_variable: facter_ipaddress
+    - asterixdb_data_dir: /run/mount/asterixdb/
+
+  roles:
+    - facter
+    - ansible-role-asterixdb
+    - asterixdb-test
+
+  tags:
+    - ubuntu-cluster
+
+
 - name: Stop the Docker containers
   hosts: localhost
   gather_facts: false
@@ -73,8 +77,11 @@
   vars_files:
     - docker_containers.yml
 
+  vars:
+    - container_state: absent
+
   roles:
-    - docker-stop
+    - docker
 
   tags:
     - docker-stop

@@ -117,6 +117,3 @@
   when: asterixdb_cluster == False or asterixdb_master == True
   become_user: asterixdb
   become_method: sudo
-
-#- name: Ensure AsterixDB is started and enabled on boot
-#  service: name=asterixdb state=started enabled=yes
