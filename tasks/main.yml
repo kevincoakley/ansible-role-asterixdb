@@ -3,31 +3,54 @@
   include_vars: "{{ ansible_os_family }}.yml"
 
 - name: Create the asterixdb group
-  group: name=asterixdb state=present system=yes
+  group:
+    name: asterixdb
+    state: present
+    system: yes
 
 - name: Create the asterixdb user
-  user: name=asterixdb groups=asterixdb append=yes shell=/bin/bash
+  user:
+    name: asterixdb
+    groups: asterixdb
+    append: yes
+    shell: /bin/bash
 
 #
 # You must run files/ssh/make_ssh_key.sh before running this role
 #
-- name: Set up generated authorized_key for the asterixdb user
-  authorized_key: user=asterixdb key="{{ item }}"
+- name: Add the generated authorized_key to the asterixdb user
+  authorized_key:
+    user: asterixdb
+    key: "{{ item }}"
   with_file: "{{ role_path }}/files/ssh/id_rsa.pub"
 
 - name: Copy the generated SSH private key to the asterixdb home directory
-  copy: src="{{ role_path }}/files/ssh/id_rsa" dest=/home/asterixdb/.ssh/id_rsa owner=asterixdb group=asterixdb mode=0400
+  copy:
+    src: "{{ role_path }}/files/ssh/id_rsa"
+    dest: /home/asterixdb/.ssh/id_rsa
+    owner: asterixdb
+    group: asterixdb
+    mode: 0400
 
-- name: Copy the SSH config to the asterixdb home directory so ssh doesn't ask to verify host signatures 
-  copy: src="{{ role_path }}/files/ssh/ssh_config" dest=/home/asterixdb/.ssh/config owner=asterixdb group=asterixdb mode=0400
+- name: Copy the SSH config to the asterixdb home directory
+  copy:
+    src: "{{ role_path }}/files/ssh/ssh_config"
+    dest: /home/asterixdb/.ssh/config
+    owner: asterixdb
+    group: asterixdb
+    mode: 0400
 
-- name: Download and install yum packages
-  yum: name={{ item }} state=present
+- name: Download and install the required packages (yum)
+  yum:
+    name: "{{ item }}"
+    state: present
   with_items: "{{ asterixdb_packages }}"
   when: ansible_os_family == "RedHat"
 
-- name: Download and install apt-get packages
-  apt: name={{ item }} state=present
+- name: Download and install the required packages (apt)
+  apt:
+    name: "{{ item }}"
+    state: present
   with_items: "{{ asterixdb_packages }}"
   when: ansible_os_family == "Debian"
 
@@ -35,34 +58,76 @@
 # Create the AsterixDB data directory tree
 #
 - name: Create the AsterixDB data directory
-  file: path={{ asterixdb_data_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "{{ asterixdb_data_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the AsterixDB working directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_working_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the AsterixDB logs directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_logs_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_logs_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the AsterixDB transaction logs directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_txn_logs }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_txn_logs }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the AsterixDB iodevices directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_iodevices }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_iodevices }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the AsterixDB backup directory
-  file: path={{ asterixdb_data_dir }}{{ asterixdb_backup_dir }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_backup_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 #
 # Set the open file limit to 40000
 #
 - name: Set the open files soft limits in /etc/security/limits.conf
-  lineinfile: dest=/etc/security/limits.conf line="*           soft    nofile          40000" insertbefore="# End of file" state=present
+  lineinfile:
+    dest: /etc/security/limits.conf
+    line: "*           soft    nofile          40000"
+    insertbefore: "# End of file"
+    state: present
 
 - name: Set the open files hard limits in /etc/security/limits.conf
-  lineinfile: dest=/etc/security/limits.conf line="*           hard    nofile          40000" insertbefore="# End of file" state=present
+  lineinfile:
+    dest: /etc/security/limits.conf
+    line: "*           hard    nofile          40000"
+    insertbefore: "# End of file"
+    state: present
 
 - name: Ensure pam_limits.so is enabled
-  lineinfile: dest=/etc/pam.d/su  regexp="^(# )?session    required   pam_limits.so" line="session    required   pam_limits.so" state=present
+  lineinfile:
+    dest: /etc/pam.d/su
+    regexp: "^(# )?session    required   pam_limits.so"
+    line: "session    required   pam_limits.so"
+    state: present
 
 #
 # Install NFS if AsterixDB is clustered
@@ -73,34 +138,69 @@
 - include: nfs-client.yml
   when: asterixdb_cluster == True and asterixdb_master == False
 
+#
+# Install AsterixDB
+#
 - name: Check if the version of AsterixDB already exists
   stat: path=/opt/asterixdb-{{ asterixdb_version }}
   register: asterixdb_install_path
 
 - name: Download AsterixDB
-  get_url: url={{ asterixdb_download_url }} dest=/tmp/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip
+  get_url:
+    url: "{{ asterixdb_download_url }}"
+    dest: "/tmp/asterix-installer-{{ asterixdb_version }}.zip"
   when: asterixdb_install_path.stat.exists == False
 
-- name: Create the AsterixDB install dir
-  file: path=/opt/asterixdb-{{ asterixdb_version }} state=directory owner=asterixdb group=asterixdb mode=0755
+- name: Create the AsterixDB install directory in /opt/
+  file:
+    path: "/opt/asterixdb-{{ asterixdb_version }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
   when: asterixdb_install_path.stat.exists == False
 
-- name: Extract AsterixDB
-  unarchive: src=/tmp/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip dest=/opt/asterixdb-{{ asterixdb_version }} copy=no owner=asterixdb group=asterixdb
+- name: Extract AsterixDB into the install directory
+  unarchive:
+    src: "/tmp/asterix-installer-{{ asterixdb_version }}.zip"
+    dest: "/opt/asterixdb-{{ asterixdb_version }}"
+    copy: no
+    owner: asterixdb
+    group: asterixdb
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create a symlink for /opt/asterixdb
-  file: src=/opt/asterixdb-{{ asterixdb_version }} dest=/opt/asterixdb owner=asterixdb group=asterixdb state=link
+  file:
+    src: "/opt/asterixdb-{{ asterixdb_version }}"
+    dest: /opt/asterixdb
+    owner: asterixdb
+    group: asterixdb
+    state: link
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create the cluster config dir
-  file: path=/opt/asterixdb/clusters/{{ asterixdb_cluster_name }} state=directory owner=asterixdb group=asterixdb mode=0755
+  file:
+    path: "/opt/asterixdb/clusters/{{ asterixdb_cluster_name }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the cluster config file 
-  template: src=asterixdb/cluster.xml.j2 dest=/opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml owner=asterixdb group=asterixdb mode=0644
+  template:
+    src: asterixdb/cluster.xml.j2
+    dest: "/opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml"
+    owner: asterixdb
+    group: asterixdb
+    mode: 0644
 
 - name: Create the Managix config file
-  template: src=asterixdb/managix-conf.xml.j2 dest=/opt/asterixdb/conf/managix-conf.xml owner=asterixdb group=asterixdb mode=0644
+  template:
+    src: asterixdb/managix-conf.xml.j2
+    dest: /opt/asterixdb/conf/managix-conf.xml
+    owner: asterixdb
+    group: asterixdb
+    mode: 0644
 
 - name: Test the Managix config
   shell: /opt/asterixdb/bin/managix validate -c /opt/asterixdb/clusters/default/default.xml
