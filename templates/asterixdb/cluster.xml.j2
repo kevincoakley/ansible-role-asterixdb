@@ -37,6 +37,9 @@
 
   <!-- Java home for each machine -->
   <java_home>{{ java_home }}</java_home>
+{% if asterixdb_metadata_node is defined and asterixdb_metadata_node %}
+  <metadata_node>{{ asterixdb_metadata_node }}</metadata_node>
+{% endif %}
 
 {% if asterixdb_cluster == True %}
 {% for host in groups[asterixdb_ansible_host_group] %}

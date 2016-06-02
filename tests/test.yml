@@ -40,6 +40,7 @@
     - asterixdb_ansible_host_group: centos-cluster
     - asterixdb_server_variable: facter_ipaddress
     - asterixdb_data_dir: /run/mount/asterixdb/
+    - asterixdb_metadata_node: centos-cluster-0
 
   roles:
     - facter
@@ -60,6 +61,7 @@
     - asterixdb_ansible_host_group: ubuntu-cluster
     - asterixdb_server_variable: facter_ipaddress
     - asterixdb_data_dir: /run/mount/asterixdb/
+    - asterixdb_metadata_node: ubuntu-cluster-0
 
   roles:
     - facter
