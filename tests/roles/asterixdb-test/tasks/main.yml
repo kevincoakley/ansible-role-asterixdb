@@ -17,3 +17,4 @@
   become_method: sudo
   failed_when: "'State:ACTIVE' not in asterixdb_server_status.stdout"
   when: asterixdb_cluster == False or asterixdb_master == True
+  changed_when: False
