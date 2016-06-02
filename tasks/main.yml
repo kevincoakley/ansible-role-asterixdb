@@ -220,4 +220,4 @@
   when: asterixdb_cluster == False or asterixdb_master == True
   become_user: asterixdb
   become_method: sudo
-  failed_when: "'State:ACTIVE' not in asterixdb_create_cluster_status.stdout"
+  failed_when: "('State:ACTIVE' not in asterixdb_create_cluster_status.stdout) and ('skipped' not in asterixdb_create_cluster_status.stdout)"
