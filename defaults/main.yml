@@ -5,7 +5,7 @@ asterixdb_ansible_host_group: asterixdb
 asterixdb_server_variable: ansible_ssh_host
 asterixdb_data_dir: /mnt/asterixdb/
 asterixdb_working_dir: asterixdb-working-dir
-asterixdb_cluster_name: default
+asterixdb_instance_name: default
 asterixdb_logs_dir: asterixdb-logs
 asterixdb_txn_logs: asterixdb-txn-logs
 asterixdb_iodevices: asterixdb/
