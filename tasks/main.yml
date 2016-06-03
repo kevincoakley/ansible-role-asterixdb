@@ -67,7 +67,7 @@
 
 - name: Create the AsterixDB working directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -75,7 +75,7 @@
 
 - name: Create the AsterixDB logs directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_logs_dir }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_logs_dir }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -83,7 +83,7 @@
 
 - name: Create the AsterixDB transaction logs directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_txn_logs }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_txn_logs }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -91,7 +91,7 @@
 
 - name: Create the AsterixDB iodevices directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_iodevices }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_iodevices }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -99,7 +99,7 @@
 
 - name: Create the AsterixDB backup directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_backup_dir }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_backup_dir }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -180,7 +180,7 @@
 
 - name: Create the cluster config dir
   file:
-    path: "/opt/asterixdb/clusters/{{ asterixdb_cluster_name }}"
+    path: "/opt/asterixdb/clusters/{{ asterixdb_instance_name }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -189,7 +189,7 @@
 - name: Create the cluster config file 
   template:
     src: asterixdb/cluster.xml.j2
-    dest: "/opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml"
+    dest: "/opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml"
     owner: asterixdb
     group: asterixdb
     mode: 0644
@@ -213,9 +213,9 @@
   changed_when: False
 
 - name: Create the AsterixDB cluster instance
-  shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_cluster_name }} -c /opt/asterixdb/clusters/{{ asterixdb_cluster_name }}/{{ asterixdb_cluster_name }}.xml
+  shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_instance_name }} -c /opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml
   args:
-    creates: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}/configuration.xml"
+    creates: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}/configuration.xml"
     executable: /bin/bash
   register: asterixdb_create_cluster_status
   when: asterixdb_cluster == False or asterixdb_master == True

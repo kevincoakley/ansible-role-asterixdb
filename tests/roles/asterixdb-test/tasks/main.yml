@@ -9,7 +9,7 @@
   when: asterixdb_cluster == False or asterixdb_master == True
 
 - name: Get the status of the Asterixdb server
-  shell: /opt/asterixdb/bin/managix describe -n {{ asterixdb_cluster_name }}
+  shell: /opt/asterixdb/bin/managix describe -n {{ asterixdb_instance_name }}
   args:
     executable: /bin/bash
   register: asterixdb_server_status
