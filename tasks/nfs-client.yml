@@ -21,7 +21,7 @@
 
 - name: Create the AsterixDB NFS export directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
     state: directory
     owner: asterixdb
     group: asterixdb
@@ -29,7 +29,7 @@
 
 - name: Add the NFS master share to /etc/fstab
   mount:
-    name: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    name: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
     src: "{{ hostvars[item][asterixdb_server_variable] }}:/"
     fstype: nfs4
     state: present
@@ -38,7 +38,7 @@
 
 - name: Mount the NFS master share 
   mount:
-    name: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    name: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
     src: "{{ hostvars[item][asterixdb_server_variable] }}:/"
     fstype: nfs4
     state: mounted

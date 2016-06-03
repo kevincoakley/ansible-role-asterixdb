@@ -32,7 +32,7 @@
 
 - name: Create the AsterixDB NFS export directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_working_dir }}"
+    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
     state: directory
     owner: asterixdb
     group: asterixdb

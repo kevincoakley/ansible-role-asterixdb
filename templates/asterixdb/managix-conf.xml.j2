@@ -6,7 +6,7 @@
             <version>0.20.2</version>
             <url></url>
         </hdfs>
-        <backupDir>{{ asterixdb_data_dir }}{{ asterixdb_backup_dir }}</backupDir>
+        <backupDir>{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_backup_dir }}</backupDir>
     </backup>
     <zookeeper>
         <homeDir>/opt/asterixdb/.installer/zookeeper_home</homeDir>
