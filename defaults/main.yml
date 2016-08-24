@@ -10,6 +10,8 @@ asterixdb_logs_dir: asterixdb-logs
 asterixdb_txn_logs: asterixdb-txn-logs
 asterixdb_iodevices: asterixdb/
 asterixdb_iodevices_storage: storage
+asterixdb_client_ip: "{{ ansible_host }}"
+asterixdb_cluster_ip: "{{ ansible_host }}"
 asterixdb_client_port: 1098
 asterixdb_cluster_port: 1099
 asterixdb_http_port: 8888
