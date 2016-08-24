@@ -14,7 +14,7 @@ asterixdb_client_port: 1098
 asterixdb_cluster_port: 1099
 asterixdb_http_port: 8888
 asterixdb_backup_dir: asterixdb-backup
-asterixdb_download_url: http://www-us.apache.org/dist/incubator/asterixdb/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip
+asterixdb_download_url: https://www-us.apache.org/dist/asterixdb/asterixdb-{{ asterixdb_version }}-incubating/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip
 # asterixdb_metadata_node only need to be set for clusters. Enter the hostname from the inventory for the node to
 # store the metadata. If you are running a cluster and you do not set asterixdb_metadata_node, then asterixdb will
 # select a random node to store the metadata.
