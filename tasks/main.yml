@@ -203,7 +203,7 @@
     mode: 0644
 
 - name: Test the Managix config
-  shell: /opt/asterixdb/bin/managix validate -c /opt/asterixdb/clusters/default/default.xml
+  shell: "/opt/asterixdb/bin/managix validate -c /opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml"
   args:
     executable: /bin/bash
   register: asterixdb_managix_config_status
