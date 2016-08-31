@@ -194,6 +194,14 @@
     group: asterixdb
     mode: 0644
 
+- name: Create the Asterix config file
+  template:
+    src: asterixdb/asterix-configuration.xml.j2
+    dest: /opt/asterixdb/conf/asterix-configuration.xml
+    owner: asterixdb
+    group: asterixdb
+    mode: 0644
+
 - name: Create the Managix config file
   template:
     src: asterixdb/managix-conf.xml.j2
