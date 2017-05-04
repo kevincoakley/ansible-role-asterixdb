@@ -47,12 +47,12 @@ Example Inventory
 -----------------
 
     [asterixdb-single]
-    asterixdb-single ansible_ssh_host=127.0.0.1
+    asterixdb-single ansible_host=127.0.0.1
     
     [asterixdb-clustered]
-    asterixdb-cluster-0 ansible_ssh_host=127.0.0.1 asterixdb_master=True asterixdb_worker=True
-    asterixdb-cluster-1 ansible_ssh_host=127.0.0.1 asterixdb_master=False asterixdb_worker=True
-    asterixdb-cluster-2 ansible_ssh_host=127.0.0.1 asterixdb_master=False asterixdb_worker=True
+    asterixdb-cluster-0 ansible_host=127.0.0.1 asterixdb_master=True 
+    asterixdb-cluster-1 ansible_host=127.0.0.1 asterixdb_master=False 
+    asterixdb-cluster-2 ansible_host=127.0.0.1 asterixdb_master=False 
 
 License
 -------
