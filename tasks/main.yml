@@ -40,19 +40,11 @@
     group: asterixdb
     mode: 0400
 
-- name: Download and install the required packages (yum)
-  yum:
+- name: Download and install the required packages
+  package:
     name: "{{ item }}"
     state: present
   with_items: "{{ asterixdb_packages }}"
-  when: ansible_os_family == "RedHat"
-
-- name: Download and install the required packages (apt)
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ asterixdb_packages }}"
-  when: ansible_os_family == "Debian"
 
 #
 # Create the AsterixDB data directory tree
