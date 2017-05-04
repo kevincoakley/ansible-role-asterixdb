@@ -2,55 +2,9 @@
 asterixdb_version: 0.8.8
 asterixdb_cluster: False
 asterixdb_ansible_host_group: asterixdb
-asterixdb_server_variable: ansible_ssh_host
-asterixdb_data_dir: /mnt/asterixdb/
-asterixdb_working_dir: asterixdb-working-dir
-asterixdb_instance_name: default
-asterixdb_logs_dir: asterixdb-logs
-asterixdb_txn_logs: asterixdb-txn-logs
-asterixdb_iodevices: asterixdb/
-asterixdb_iodevices_storage: storage
-asterixdb_client_ip: "{{ ansible_host }}"
-asterixdb_cluster_ip: "{{ ansible_host }}"
-asterixdb_client_port: 1098
-asterixdb_cluster_port: 1099
-asterixdb_http_port: 8888
-asterixdb_backup_dir: asterixdb-backup
-asterixdb_download_url: https://www-us.apache.org/dist/asterixdb/asterixdb-{{ asterixdb_version }}-incubating/asterix-installer-{{ asterixdb_version }}-incubating-binary-assembly.zip
-# asterixdb_metadata_node only need to be set for clusters. Enter the hostname from the inventory for the node to
-# store the metadata. If you are running a cluster and you do not set asterixdb_metadata_node, then asterixdb will
-# select a random node to store the metadata.
-asterixdb_metadata_node:
-
-asterixdb_nc_java_opts: -Xmx3096m
-asterixdb_cc_java_opts: -Xmx1024m
-asterixdb_max_wait_active_cluster: 60
-asterixdb_storage_buffercache_pagesize: 128KB
-asterixdb_storage_buffercache_size: 512MB
-asterixdb_storage_buffercache_maxopenfiles: 214748364
-asterixdb_storage_memorycomponent_pagesize: 128KB
-asterixdb_storage_memorycomponent_numpages: 256
-asterixdb_storage_metadata_memorycomponent_numpages: 64
-asterixdb_storage_memorycomponent_numcomponents: 2
-asterixdb_storage_memorycomponent_globalbudget: 1GB
-asterixdb_storage_lsm_bloomfilter_falsepositiverate: 0.01
-asterixdb_txn_log_buffer_numpages: 8
-asterixdb_txn_log_buffer_pagesize: 512KB
-asterixdb_txn_log_partitionsize: 2GB
-asterixdb_txn_log_checkpoint_lsnthreshold: 67108864
-asterixdb_txn_log_checkpoint_pollfrequency: 120
-asterixdb_txn_log_checkpoint_history: 0
-asterixdb_txn_lock_escalationthreshold: 1000
-asterixdb_txn_lock_shrinktimer: 5000
-asterixdb_txn_lock_timeout_waitthreshold: 60000
-asterixdb_txn_lock_timeout_sweepthreshold: 10000
-asterixdb_txn_job_recovery_memorysize: 64MB
-asterixdb_compiler_sortmemory: 32MB
-asterixdb_compiler_joinmemory: 32MB
-asterixdb_compiler_framesize: 128KB
-asterixdb_compiler_pregelix_home: ~/pregelix
-asterixdb_web_port: 19001
-asterixdb_web_queryinterface_port: 19006
-asterixdb_api_port: 19002
-asterixdb_log_level: INFO
-asterixdb_plot_activate: false
+asterixdb_server_variable: ansible_host
+asterixdb_txn_log_dir: txnlog
+asterixdb_core_dump_dir: coredump
+asterixdb_iodevices: /mnt/asterixdb/data
+asterixdb_service_username: asterixdb
+asterixdb_service_group: asterixdb
