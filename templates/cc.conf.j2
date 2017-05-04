@@ -1,0 +1,31 @@
+{% if asterixdb_cluster == True %}
+{% for host in groups[asterixdb_ansible_host_group] %}
+[nc/{{ hostvars[host]['inventory_hostname'] }}]
+txn.log.dir={{ asterixdb_iodevices }}/{{ hostvars[host]['inventory_hostname'] }}/{{ asterixdb_txn_log_dir }}
+core.dump.dir={{ asterixdb_iodevices }}/{{ hostvars[host]['inventory_hostname'] }}/{{ asterixdb_core_dump_dir }}
+iodevices={{ asterixdb_iodevices }}/{{ hostvars[host]['inventory_hostname'] }}
+address={{ hostvars[host][asterixdb_server_variable] }}
+
+{% endfor %}
+{% else %}
+[nc/localhost]
+txn.log.dir={{ asterixdb_iodevices }}/localhost/{{ asterixdb_txn_log_dir }}
+core.dump.dir={{ asterixdb_iodevices }}/localhost/{{ asterixdb_core_dump_dir }}
+iodevices={{ asterixdb_iodevices }}/localhost
+address=localhost
+{% endif %}
+
+[nc]
+app.class=org.apache.asterix.hyracks.bootstrap.NCApplicationEntryPoint
+command=asterixnc
+
+[cc]
+{% if asterixdb_cluster == True %}
+{% for host in groups[asterixdb_ansible_host_group] %}
+{% if hostvars[host].asterixdb_master == True %}
+address={{ hostvars[host][asterixdb_server_variable] }}
+{% endif %}
+{% endfor %}
+{% else %}
+address=localhost
+{% endif %}

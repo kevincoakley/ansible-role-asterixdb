@@ -137,55 +137,46 @@
     state: link
   when: asterixdb_install_path.stat.exists == False
 
-- name: Create the cluster config dir
-  file:
-    path: "/opt/asterixdb/clusters/{{ asterixdb_instance_name }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
 - name: Create the cluster config file 
   template:
-    src: asterixdb/cluster.xml.j2
-    dest: "/opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml"
+    src: cc.conf.j2
+    dest: /opt/asterixdb/cc.conf
     owner: asterixdb
     group: asterixdb
     mode: 0644
 
-- name: Create the Asterix config file
+- name: Copy the NC systemd service file
   template:
-    src: asterixdb/asterix-configuration.xml.j2
-    dest: /opt/asterixdb/conf/asterix-configuration.xml
-    owner: asterixdb
-    group: asterixdb
+    src: asterixdb-nc.service.j2
+    dest: /etc/systemd/system/asterixdb-nc.service
+    owner: root
+    group: root
     mode: 0644
+  notify:
+    - reload systemd
+    - restart asterixdb-nc
 
-- name: Create the Managix config file
+- name: Copy the CC systemd service file
   template:
-    src: asterixdb/managix-conf.xml.j2
-    dest: /opt/asterixdb/conf/managix-conf.xml
-    owner: asterixdb
-    group: asterixdb
+    src: asterixdb-cc.service.j2
+    dest: /etc/systemd/system/asterixdb-cc.service
+    owner: root
+    group: root
     mode: 0644
-
-- name: Test the Managix config
-  shell: "/opt/asterixdb/bin/managix validate -c /opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml"
-  args:
-    executable: /bin/bash
-  register: asterixdb_managix_config_status
-  become_user: asterixdb
-  become_method: sudo
-  failed_when: "'ERROR' in asterixdb_managix_config_status.stdout"
-  changed_when: False
-
-- name: Create the AsterixDB cluster instance
-  shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_instance_name }} -c /opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml
-  args:
-    creates: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}/configuration.xml"
-    executable: /bin/bash
-  register: asterixdb_create_cluster_status
+  notify:
+    - reload systemd
+    - restart asterixdb-cc
   when: asterixdb_cluster == False or asterixdb_master == True
-  become_user: asterixdb
-  become_method: sudo
-  failed_when: "('State:ACTIVE' not in asterixdb_create_cluster_status.stdout) and ('skipped' not in asterixdb_create_cluster_status.stdout)"
+
+- name: Ensure NC service is started and enabled on boot
+  service:
+    name: asterixdb-nc
+    state: started
+    enabled: yes
+
+- name: Ensure CC service is started and enabled on boot
+  service:
+    name: asterixdb-cc
+    state: started
+    enabled: yes
+  when: asterixdb_cluster == False or asterixdb_master == True
