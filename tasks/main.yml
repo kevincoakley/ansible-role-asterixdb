@@ -130,15 +130,6 @@
     state: present
 
 #
-# Install NFS if AsterixDB is clustered
-#
-- include: nfs-master.yml
-  when: asterixdb_cluster == True and asterixdb_master == True
-
-- include: nfs-client.yml
-  when: asterixdb_cluster == True and asterixdb_master == False
-
-#
 # Install AsterixDB
 #
 - name: Check if the version of AsterixDB already exists
