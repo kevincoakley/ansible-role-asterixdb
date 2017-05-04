@@ -107,7 +107,7 @@
 - name: Download AsterixDB
   get_url:
     url: "{{ asterixdb_download_url }}"
-    dest: "/tmp/asterix-installer-{{ asterixdb_version }}.zip"
+    dest: "/tmp/asterix-server-{{ asterixdb_version }}.zip"
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create the AsterixDB install directory in /opt/
@@ -121,7 +121,7 @@
 
 - name: Extract AsterixDB into the install directory
   unarchive:
-    src: "/tmp/asterix-installer-{{ asterixdb_version }}.zip"
+    src: "/tmp/asterix-server-{{ asterixdb_version }}.zip"
     dest: "/opt/asterixdb-{{ asterixdb_version }}"
     copy: no
     owner: asterixdb
