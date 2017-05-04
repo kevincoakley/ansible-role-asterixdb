@@ -7,14 +7,3 @@
     url: http://127.0.0.1:19001/
     status_code: 200
   when: asterixdb_cluster == False or asterixdb_master == True
-
-- name: Get the status of the Asterixdb server
-  shell: /opt/asterixdb/bin/managix describe -n {{ asterixdb_instance_name }}
-  args:
-    executable: /bin/bash
-  register: asterixdb_server_status
-  become_user: asterixdb
-  become_method: sudo
-  failed_when: "'State:ACTIVE' not in asterixdb_server_status.stdout"
-  when: asterixdb_cluster == False or asterixdb_master == True
-  changed_when: False
