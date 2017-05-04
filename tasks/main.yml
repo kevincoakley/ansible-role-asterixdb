@@ -49,49 +49,25 @@
 #
 # Create the AsterixDB data directory tree
 #
-- name: Create the AsterixDB data directory
-  file:
-    path: "{{ asterixdb_data_dir }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
-- name: Create the AsterixDB working directory
-  file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
-- name: Create the AsterixDB logs directory
-  file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_logs_dir }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
-- name: Create the AsterixDB transaction logs directory
-  file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_txn_logs }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
 - name: Create the AsterixDB iodevices directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_iodevices }}"
+    path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}"
     state: directory
     owner: asterixdb
     group: asterixdb
     mode: 0755
 
-- name: Create the AsterixDB backup directory
+- name: Create the AsterixDB txn.log.dir directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_backup_dir }}"
+    path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}/{{ asterixdb_txn_log_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
+
+- name: Create the AsterixDB core.dump.dir directory
+  file:
+    path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}/{{ asterixdb_core_dump_dir }}"
     state: directory
     owner: asterixdb
     group: asterixdb
