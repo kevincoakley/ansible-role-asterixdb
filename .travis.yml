@@ -35,6 +35,22 @@ script:
   - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
   # Run the playbook, don't bother stopping the Docker containers
   - ansible-playbook -i tests/inventory --skip-tags=docker-stop tests/test.yml
+  # Run again to test idempotence
+  - >
+    ansible-playbook -i tests/inventory --tags=asterixdb tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+  - >
+    ansible-playbook -i tests/inventory --tags=centos-cluster tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+  - >
+    ansible-playbook -i tests/inventory --tags=ubuntu-cluster tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
