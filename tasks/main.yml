@@ -73,14 +73,6 @@
     group: asterixdb
     mode: 0755
 
-- name: Create the AsterixDB service log directory
-  file:
-    path: "asterixdb_service_logs_dir"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
 #
 # Set the open file limit to 40000
 #
@@ -144,6 +136,14 @@
     group: asterixdb
     state: link
   when: asterixdb_install_path.stat.exists == False
+
+- name: Create the AsterixDB service log directory
+  file:
+    path: "{{ asterixdb_service_logs_dir }}"
+    state: directory
+    owner: asterixdb
+    group: asterixdb
+    mode: 0755
 
 - name: Create the cluster config file 
   template:
