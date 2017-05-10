@@ -15,9 +15,12 @@ iodevices={{ asterixdb_iodevices }}/localhost
 address=localhost
 {% endif %}
 
+
 [nc]
 app.class=org.apache.asterix.hyracks.bootstrap.NCApplicationEntryPoint
 command=asterixnc
+{% if asterixdb_jvm_args is not none %}jvm.args={{ asterixdb_jvm_args }}{% endif %}
+
 
 [cc]
 {% if asterixdb_cluster == True %}

@@ -12,3 +12,4 @@ asterixdb_download_url: http://www-us.apache.org/dist/asterixdb/asterixdb-{{ ast
 asterixdb_txn_log_dir: txnlog
 asterixdb_core_dump_dir: coredump
 asterixdb_iodevices: /mnt/asterixdb/data
+asterixdb_jvm_args:
