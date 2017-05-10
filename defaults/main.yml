@@ -3,10 +3,12 @@ asterixdb_version: 0.9.1
 asterixdb_cluster: False
 asterixdb_ansible_host_group: asterixdb
 asterixdb_server_variable: ansible_host
-asterixdb_txn_log_dir: txnlog
-asterixdb_core_dump_dir: coredump
-asterixdb_iodevices: /mnt/asterixdb/data
 asterixdb_service_username: asterixdb
 asterixdb_service_group: asterixdb
 asterixdb_service_logs_dir: /opt/asterixdb/logs
 asterixdb_download_url: http://www-us.apache.org/dist/asterixdb/asterixdb-{{ asterixdb_version }}/asterix-server-{{ asterixdb_version }}-binary-assembly.zip
+
+# NC defaults
+asterixdb_txn_log_dir: txnlog
+asterixdb_core_dump_dir: coredump
+asterixdb_iodevices: /mnt/asterixdb/data
