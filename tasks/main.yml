@@ -15,31 +15,6 @@
     append: yes
     shell: /bin/bash
 
-#
-# You must run files/ssh/make_ssh_key.sh before running this role
-#
-- name: Add the generated authorized_key to the asterixdb user
-  authorized_key:
-    user: asterixdb
-    key: "{{ item }}"
-  with_file: "{{ role_path }}/files/ssh/id_rsa.pub"
-
-- name: Copy the generated SSH private key to the asterixdb home directory
-  copy:
-    src: "{{ role_path }}/files/ssh/id_rsa"
-    dest: /home/asterixdb/.ssh/id_rsa
-    owner: asterixdb
-    group: asterixdb
-    mode: 0400
-
-- name: Copy the SSH config to the asterixdb home directory
-  copy:
-    src: "{{ role_path }}/files/ssh/ssh_config"
-    dest: /home/asterixdb/.ssh/config
-    owner: asterixdb
-    group: asterixdb
-    mode: 0400
-
 - name: Download and install the required packages
   package:
     name: "{{ item }}"
