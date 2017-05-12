@@ -4,14 +4,14 @@
 
 - name: Create the asterixdb group
   group:
-    name: asterixdb
+    name: "{{ asterixdb_service_group }}"
     state: present
     system: yes
 
 - name: Create the asterixdb user
   user:
-    name: asterixdb
-    groups: asterixdb
+    name: "{{ asterixdb_service_username }}"
+    groups: "{{ asterixdb_service_group }}"
     append: yes
     shell: /bin/bash
 
@@ -28,24 +28,24 @@
   file:
     path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
 - name: Create the AsterixDB txn.log.dir directory
   file:
     path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}/{{ asterixdb_txn_log_dir }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
 - name: Create the AsterixDB core.dump.dir directory
   file:
     path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}/{{ asterixdb_core_dump_dir }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
 #
@@ -89,8 +89,8 @@
   file:
     path: "/opt/asterixdb-{{ asterixdb_version }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
   when: asterixdb_install_path.stat.exists == False
 
@@ -99,16 +99,16 @@
     src: "/tmp/asterix-server-{{ asterixdb_version }}.zip"
     dest: "/opt/asterixdb-{{ asterixdb_version }}"
     copy: no
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create a symlink for /opt/asterixdb
   file:
     src: "/opt/asterixdb-{{ asterixdb_version }}"
     dest: /opt/asterixdb
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     state: link
   when: asterixdb_install_path.stat.exists == False
 
@@ -116,16 +116,16 @@
   file:
     path: "{{ asterixdb_service_logs_dir }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
 - name: Create the cluster config file 
   template:
     src: cc.conf.j2
     dest: /opt/asterixdb/cc.conf
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0644
 
 - name: Copy the NC systemd service file
