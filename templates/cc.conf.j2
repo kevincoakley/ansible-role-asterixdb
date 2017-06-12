@@ -32,3 +32,6 @@ address={{ hostvars[host][asterixdb_server_variable] }}
 {% else %}
 address=localhost
 {% endif %}
+
+[common]
+log.level={{ asterixdb_log_level }}

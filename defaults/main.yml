@@ -13,3 +13,6 @@ asterixdb_txn_log_dir: txnlog
 asterixdb_core_dump_dir: coredump
 asterixdb_iodevices: /mnt/asterixdb/data
 asterixdb_jvm_args:
+
+# Common defaults
+asterixdb_log_level: WARNING
