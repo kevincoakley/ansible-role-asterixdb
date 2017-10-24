@@ -120,7 +120,7 @@
     group: "{{ asterixdb_service_group }}"
     mode: 0755
 
-- name: Create the cluster config file 
+- name: Create the cluster config file
   template:
     src: cc.conf.j2
     dest: /opt/asterixdb/cc.conf
