@@ -2,14 +2,24 @@
 docker_containers:
   - name: ubuntu-system
     image: kevincoakley/ubuntu16.04-systemd
+    expose:
+      - "16001"
+      - "19001"
     ports:
       - "2200:22"
+      - "16011:16001"
+      - "19011:19001"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: centos-system
     image: kevincoakley/centos7-systemd
+    expose:
+      - "16001"
+      - "19001"
     ports:
       - "2222:22"
+      - "16012:16001"
+      - "19012:19001"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: centos-cluster-1
@@ -26,8 +36,13 @@ docker_containers:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: centos-cluster-0
     image: kevincoakley/centos7-systemd
+    expose:
+      - "16001"
+      - "19001"
     ports:
       - "2223:22"
+      - "16021:16001"
+      - "19021:19001"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: ubuntu-cluster-1
@@ -44,7 +59,12 @@ docker_containers:
       - "/sys/fs/cgroup:/sys/fs/cgroup"
   - name: ubuntu-cluster-0
     image: kevincoakley/ubuntu16.04-systemd
+    expose:
+      - "16001"
+      - "19001"
     ports:
       - "2201:22"
+      - "16022:16001"
+      - "19022:19001"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup"

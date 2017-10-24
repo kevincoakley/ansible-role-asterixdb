@@ -4,105 +4,48 @@
 
 - name: Create the asterixdb group
   group:
-    name: asterixdb
+    name: "{{ asterixdb_service_group }}"
     state: present
     system: yes
 
 - name: Create the asterixdb user
   user:
-    name: asterixdb
-    groups: asterixdb
+    name: "{{ asterixdb_service_username }}"
+    groups: "{{ asterixdb_service_group }}"
     append: yes
     shell: /bin/bash
 
-#
-# You must run files/ssh/make_ssh_key.sh before running this role
-#
-- name: Add the generated authorized_key to the asterixdb user
-  authorized_key:
-    user: asterixdb
-    key: "{{ item }}"
-  with_file: "{{ role_path }}/files/ssh/id_rsa.pub"
-
-- name: Copy the generated SSH private key to the asterixdb home directory
-  copy:
-    src: "{{ role_path }}/files/ssh/id_rsa"
-    dest: /home/asterixdb/.ssh/id_rsa
-    owner: asterixdb
-    group: asterixdb
-    mode: 0400
-
-- name: Copy the SSH config to the asterixdb home directory
-  copy:
-    src: "{{ role_path }}/files/ssh/ssh_config"
-    dest: /home/asterixdb/.ssh/config
-    owner: asterixdb
-    group: asterixdb
-    mode: 0400
-
-- name: Download and install the required packages (yum)
-  yum:
+- name: Download and install the required packages
+  package:
     name: "{{ item }}"
     state: present
   with_items: "{{ asterixdb_packages }}"
-  when: ansible_os_family == "RedHat"
-
-- name: Download and install the required packages (apt)
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ asterixdb_packages }}"
-  when: ansible_os_family == "Debian"
 
 #
 # Create the AsterixDB data directory tree
 #
-- name: Create the AsterixDB data directory
-  file:
-    path: "{{ asterixdb_data_dir }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
-- name: Create the AsterixDB working directory
-  file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
-- name: Create the AsterixDB logs directory
-  file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_logs_dir }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
-- name: Create the AsterixDB transaction logs directory
-  file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_txn_logs }}"
-    state: directory
-    owner: asterixdb
-    group: asterixdb
-    mode: 0755
-
 - name: Create the AsterixDB iodevices directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_iodevices }}"
+    path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
-- name: Create the AsterixDB backup directory
+- name: Create the AsterixDB txn.log.dir directory
   file:
-    path: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_backup_dir }}"
+    path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}/{{ asterixdb_txn_log_dir }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
+    mode: 0755
+
+- name: Create the AsterixDB core.dump.dir directory
+  file:
+    path: "{{ asterixdb_iodevices }}/{{ inventory_hostname }}/{{ asterixdb_core_dump_dir }}"
+    state: directory
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
 #
@@ -130,15 +73,6 @@
     state: present
 
 #
-# Install NFS if AsterixDB is clustered
-#
-- include: nfs-master.yml
-  when: asterixdb_cluster == True and asterixdb_master == True
-
-- include: nfs-client.yml
-  when: asterixdb_cluster == True and asterixdb_master == False
-
-#
 # Install AsterixDB
 #
 - name: Check if the version of AsterixDB already exists
@@ -148,85 +82,84 @@
 - name: Download AsterixDB
   get_url:
     url: "{{ asterixdb_download_url }}"
-    dest: "/tmp/asterix-installer-{{ asterixdb_version }}.zip"
+    dest: "/tmp/asterix-server-{{ asterixdb_version }}.zip"
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create the AsterixDB install directory in /opt/
   file:
     path: "/opt/asterixdb-{{ asterixdb_version }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
   when: asterixdb_install_path.stat.exists == False
 
 - name: Extract AsterixDB into the install directory
   unarchive:
-    src: "/tmp/asterix-installer-{{ asterixdb_version }}.zip"
+    src: "/tmp/asterix-server-{{ asterixdb_version }}.zip"
     dest: "/opt/asterixdb-{{ asterixdb_version }}"
     copy: no
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
   when: asterixdb_install_path.stat.exists == False
 
 - name: Create a symlink for /opt/asterixdb
   file:
     src: "/opt/asterixdb-{{ asterixdb_version }}"
     dest: /opt/asterixdb
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     state: link
   when: asterixdb_install_path.stat.exists == False
 
-- name: Create the cluster config dir
+- name: Create the AsterixDB service log directory
   file:
-    path: "/opt/asterixdb/clusters/{{ asterixdb_instance_name }}"
+    path: "{{ asterixdb_service_logs_dir }}"
     state: directory
-    owner: asterixdb
-    group: asterixdb
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0755
 
-- name: Create the cluster config file 
+- name: Create the cluster config file
   template:
-    src: asterixdb/cluster.xml.j2
-    dest: "/opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml"
-    owner: asterixdb
-    group: asterixdb
+    src: cc.conf.j2
+    dest: /opt/asterixdb/cc.conf
+    owner: "{{ asterixdb_service_username }}"
+    group: "{{ asterixdb_service_group }}"
     mode: 0644
 
-- name: Create the Asterix config file
+- name: Copy the NC systemd service file
   template:
-    src: asterixdb/asterix-configuration.xml.j2
-    dest: /opt/asterixdb/conf/asterix-configuration.xml
-    owner: asterixdb
-    group: asterixdb
+    src: asterixdb-nc.service.j2
+    dest: /etc/systemd/system/asterixdb-nc.service
+    owner: root
+    group: root
     mode: 0644
+  notify:
+    - reload systemd
+    - restart asterixdb-nc
 
-- name: Create the Managix config file
+- name: Copy the CC systemd service file
   template:
-    src: asterixdb/managix-conf.xml.j2
-    dest: /opt/asterixdb/conf/managix-conf.xml
-    owner: asterixdb
-    group: asterixdb
+    src: asterixdb-cc.service.j2
+    dest: /etc/systemd/system/asterixdb-cc.service
+    owner: root
+    group: root
     mode: 0644
-
-- name: Test the Managix config
-  shell: "/opt/asterixdb/bin/managix validate -c /opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml"
-  args:
-    executable: /bin/bash
-  register: asterixdb_managix_config_status
-  become_user: asterixdb
-  become_method: sudo
-  failed_when: "'ERROR' in asterixdb_managix_config_status.stdout"
-  changed_when: False
-
-- name: Create the AsterixDB cluster instance
-  shell: /opt/asterixdb/bin/managix create -n {{ asterixdb_instance_name }} -c /opt/asterixdb/clusters/{{ asterixdb_instance_name }}/{{ asterixdb_instance_name }}.xml
-  args:
-    creates: "{{ asterixdb_data_dir }}{{ asterixdb_instance_name }}/{{ asterixdb_working_dir }}/configuration.xml"
-    executable: /bin/bash
-  register: asterixdb_create_cluster_status
+  notify:
+    - reload systemd
+    - restart asterixdb-cc
   when: asterixdb_cluster == False or asterixdb_master == True
-  become_user: asterixdb
-  become_method: sudo
-  failed_when: "('State:ACTIVE' not in asterixdb_create_cluster_status.stdout) and ('skipped' not in asterixdb_create_cluster_status.stdout)"
+
+- name: Ensure NC service is started and enabled on boot
+  systemd:
+    name: asterixdb-nc
+    state: started
+    enabled: yes
+
+- name: Ensure CC service is started and enabled on boot
+  systemd:
+    name: asterixdb-cc
+    state: started
+    enabled: yes
+  when: asterixdb_cluster == False or asterixdb_master == True

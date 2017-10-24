@@ -7,7 +7,7 @@
     - docker_containers.yml
 
   vars:
-    - container_state: reloaded
+    - container_state: started
     - container_privileged: true
 
   roles:
@@ -40,7 +40,6 @@
     - asterixdb_ansible_host_group: centos-cluster
     - asterixdb_server_variable: facter_ipaddress
     - asterixdb_data_dir: /run/mount/asterixdb/
-    - asterixdb_metadata_node: centos-cluster-0
 
   roles:
     - facter

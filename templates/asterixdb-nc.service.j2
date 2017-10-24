@@ -1,0 +1,16 @@
+[Unit]
+Description=AsterixDB NC Service
+After=network.target
+
+[Service]
+Type=simple
+Environment=JAVA_HOME={{ java_home }}
+User={{ asterixdb_service_username }}
+Group={{ asterixdb_service_group }}
+ExecStart=/bin/bash -c '/opt/asterixdb/bin/asterixncservice > {{ asterixdb_service_logs_dir }}/nc.log 2>&1'
+
+SyslogIdentifier=asterixdb-nc
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,3 +1,14 @@
 ---
-- name: nfs update exports
-  shell: exportfs -r
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: restart asterixdb-nc
+  systemd:
+    name: asterixdb-nc
+    state: restarted
+
+- name: restart asterixdb-cc
+  systemd:
+    name: asterixdb-cc
+    state: restarted

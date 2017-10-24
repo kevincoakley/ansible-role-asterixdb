@@ -3,7 +3,7 @@ ansible-role-asterixdb
 
 [![Build Status](https://travis-ci.org/kevincoakley/ansible-role-asterixdb.svg?branch=master)](https://travis-ci.org/kevincoakley/ansible-role-asterixdb)
 
-Install AsterixDB (single machine and clustered) - https://asterixdb.apache.org/ . Tested with CentOS 7 and Ubuntu 16.04
+Install AsterixDB (single machine and clustered) - https://asterixdb.apache.org/ . Tested with AsterixDB 0.9.2 on CentOS 7 and Ubuntu 16.04
 
 Requirements
 ------------
@@ -47,12 +47,12 @@ Example Inventory
 -----------------
 
     [asterixdb-single]
-    asterixdb-single ansible_ssh_host=127.0.0.1
-    
+    asterixdb-single
+        
     [asterixdb-clustered]
-    asterixdb-cluster-0 ansible_ssh_host=127.0.0.1 asterixdb_master=True asterixdb_worker=True
-    asterixdb-cluster-1 ansible_ssh_host=127.0.0.1 asterixdb_master=False asterixdb_worker=True
-    asterixdb-cluster-2 ansible_ssh_host=127.0.0.1 asterixdb_master=False asterixdb_worker=True
+    asterixdb-cluster-0 asterixdb_master=True 
+    asterixdb-cluster-1 asterixdb_master=False 
+    asterixdb-cluster-2 asterixdb_master=False 
 
 License
 -------
