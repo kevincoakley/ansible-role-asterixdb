@@ -1,13 +1,14 @@
 ---
 - name: reload systemd
-  command: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
 
 - name: restart asterixdb-nc
-  service:
+  systemd:
     name: asterixdb-nc
     state: restarted
 
 - name: restart asterixdb-cc
-  service:
+  systemd:
     name: asterixdb-cc
     state: restarted

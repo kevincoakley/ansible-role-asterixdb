@@ -152,13 +152,13 @@
   when: asterixdb_cluster == False or asterixdb_master == True
 
 - name: Ensure NC service is started and enabled on boot
-  service:
+  systemd:
     name: asterixdb-nc
     state: started
     enabled: yes
 
 - name: Ensure CC service is started and enabled on boot
-  service:
+  systemd:
     name: asterixdb-cc
     state: started
     enabled: yes
